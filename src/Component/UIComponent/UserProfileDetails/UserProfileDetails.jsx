@@ -18,7 +18,7 @@ export default function UserProfileDetails({ user }) {
           <React.Fragment>
             {" "}
             <Typography variant="h5" component="div" textAlign={"center"}>
-              {user?.name ?? user?.first_name ?? "Private User"}
+              {user?.name ?? "Private User"}
             </Typography>
             <Avatar
               src={user?.avatar_url}
@@ -37,14 +37,14 @@ export default function UserProfileDetails({ user }) {
                 textAlign={"center"}
                 color="text.secondary"
               >
-                {user?.login}
+                <strong>UserName: </strong> {user?.login}
               </Typography>
               {user?.bio && <Typography>{user?.bio}</Typography>}
               <Typography mt={2}>
                 <strong>Company: </strong> {user.company}
               </Typography>
               {user.twitter_username && (
-                <Typography style={{ marginTop: 40 }}>
+                <Typography>
                   <strong>Twitter: </strong> {user.twitter_username}
                 </Typography>
               )}
