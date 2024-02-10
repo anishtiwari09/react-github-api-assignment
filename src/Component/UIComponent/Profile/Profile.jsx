@@ -47,7 +47,7 @@ export default function Profile({ login }) {
                 textAlign={"center"}
                 color="text.secondary"
               >
-                <strong>UserName: </strong>
+                <strong>Username: </strong>
                 {user?.login}
               </Typography>
               <CardActions>

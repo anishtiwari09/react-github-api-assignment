@@ -37,7 +37,7 @@ export default function UserProfileDetails({ user }) {
                 textAlign={"center"}
                 color="text.secondary"
               >
-                <strong>UserName: </strong> {user?.login}
+                <strong>Username: </strong> {user?.login}
               </Typography>
               {user?.bio && <Typography>{user?.bio}</Typography>}
               <Typography mt={2}>
