@@ -29,7 +29,7 @@ export default function Profile({ login }) {
             <React.Fragment>
               {" "}
               <Typography variant="h5" component="div" textAlign={"center"}>
-                {user?.name ?? user?.first_name ?? "Private User"}
+                {user?.name ?? "Private User"}
               </Typography>
               <Avatar
                 src={user?.avatar_url}
@@ -47,6 +47,7 @@ export default function Profile({ login }) {
                 textAlign={"center"}
                 color="text.secondary"
               >
+                <strong>UserName: </strong>
                 {user?.login}
               </Typography>
               <CardActions>

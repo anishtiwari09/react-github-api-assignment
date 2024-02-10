@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getAllUser } from "../../api";
 import { Box, Grid, Pagination, Skeleton, Typography } from "@mui/material";
 import Profile from "../UIComponent/Profile/Profile";
+import SkeletonLoader from "../UIComponent/SkeletonLoader";
+import ErrorMessageShower from "../UIComponent/ErrorMessageShower";
 const perPage = 16;
 export default function UserList() {
   const [userData, setUserData] = useState([]);
@@ -44,16 +46,7 @@ export default function UserList() {
   return (
     <React.Fragment>
       {loading ? (
-        <React.Fragment>
-          <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={"100%"} />
-          <div style={{ padding: 5 }}></div>
-          <Skeleton
-            variant="rectangular"
-            width={"100%"}
-            height={window.innerHeight - 45}
-            style={{ boxSizing: "border-box" }}
-          />
-        </React.Fragment>
+        <SkeletonLoader />
       ) : userData?.length ? (
         <Grid
           container
@@ -67,11 +60,9 @@ export default function UserList() {
           ))}
         </Grid>
       ) : (
-        <div>
-          <Typography variant="h4" component="div">
-            {errorMsg ? errorMsg : "No Data Found..."}
-          </Typography>
-        </div>
+        <ErrorMessageShower
+          errorMsg={errorMsg ? errorMsg : "No Data Found..."}
+        />
       )}{" "}
       <Box width={"100%"} sx={{ marginTop: "1rem" }}>
         <Pagination

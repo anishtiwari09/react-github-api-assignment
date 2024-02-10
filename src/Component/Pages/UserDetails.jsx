@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import UserProfileDetails from "../UIComponent/UserProfileDetails/UserProfileDetails";
 import { findSpecificUserDetails } from "../../api";
+import SkeletonLoader from "../UIComponent/SkeletonLoader";
+import ErrorMessageShower from "../UIComponent/ErrorMessageShower";
 
 export default function UserDetails() {
   const { id: userName } = useParams();
@@ -28,15 +30,26 @@ export default function UserDetails() {
     }
   }, []);
   return (
-    <div>
+    <React.Fragment>
       <Link to={"/userList"}>
         <Button variant="contained" color="secondary">
           Back
         </Button>
       </Link>
-      <Box mt={4} minWidth={450} width={"fit-content"} margin={"auto"}>
-        <UserProfileDetails user={userData} />
-      </Box>
-    </div>
+
+      {loading ? (
+        <SkeletonLoader />
+      ) : userData ? (
+        <div>
+          <Box mt={4} minWidth={450} width={"fit-content"} margin={"auto"}>
+            <UserProfileDetails user={userData} />
+          </Box>
+        </div>
+      ) : (
+        <React.Fragment>
+          <ErrorMessageShower errorMsg={errorMsg || "Invalid Request Found"} />
+        </React.Fragment>
+      )}
+    </React.Fragment>
   );
 }
