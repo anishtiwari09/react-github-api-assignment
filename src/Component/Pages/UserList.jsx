@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { getAllUser } from "../../api";
-import { Box, Grid, Pagination, Skeleton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Pagination,
+  Skeleton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Profile from "../UIComponent/Profile/Profile";
 import SkeletonLoader from "../UIComponent/SkeletonLoader";
 import ErrorMessageShower from "../UIComponent/ErrorMessageShower";
 const perPage = 16;
 export default function UserList() {
   const [userData, setUserData] = useState([]);
+  const [backupInitialState, setBackupInitialState] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(true);
   const [maxPage, setMaxPage] = useState(1);
@@ -23,10 +32,12 @@ export default function UserList() {
       let resultData = await data.json();
       setLoading(false);
       if (data.status > 400) {
+        setBackupInitialState([]);
         setUserData([]);
         setErrorMsg(resultData?.message);
       } else {
         if (resultData?.length) {
+          setBackupInitialState(resultData);
           setUserData(resultData);
         }
       }
@@ -43,8 +54,63 @@ export default function UserList() {
     if (value > maxPage) setMaxPage(value);
     fetchUserData(Number(value), perPage);
   };
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const handleChange = (e, type) => {
+    console.log(e.target.value);
+    if (type === "name") {
+      setName(e.target.value);
+    } else {
+      setLocation(e.target.value);
+    }
+  };
+  const fetchDetails = async (name, location) => {
+    let queryParams = "";
+
+    if (!name && !location) {
+      setUserData(backupInitialState);
+      return;
+    }
+    if (name) {
+      queryParams = name;
+    }
+    if (location) {
+      if (name) queryParams += "+";
+      queryParams += "location:" + location;
+    }
+    try {
+      let data = await fetch(
+        `https://api.github.com/search/users?q=${queryParams}`
+      );
+      data = await data.json();
+
+      setUserData(data?.items || []);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleSearch = () => {
+    fetchDetails(name, location);
+  };
   return (
     <React.Fragment>
+      <div>
+        <TextField
+          type={"text"}
+          value={name}
+          onChange={(e) => handleChange(e, "name")}
+        />
+
+        {/* input field for name */}
+
+        <TextField
+          type={"text"}
+          value={location}
+          onChange={(e) => handleChange(e, "location")}
+        />
+
+        <Button onClick={handleSearch}>Search</Button>
+      </div>
       {loading ? (
         <SkeletonLoader />
       ) : userData?.length ? (
